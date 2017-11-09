@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <!-- After Meta -->
+    <title>Submit Suggestion</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/frameworks/bootstrap.min.css">
+    <link rel="stylesheet" href="/index.css">
+  </head>
+  <body>
+    <div class="login-page">
+      <div class="form">
+        <p id="reply"></p>
+        <form class="login-form" action="/submit.php" method="post">
+          <input type="text" name="songName" placeholder="Song Name" required/>
+          <input type="text" name="artist" placeholder="Artist (Only One Of Them If Multiple)"/>
+          <button>sumbit</button>
+          <p class="message">Please Make Sure The Song Name And Artist Name Are Spelt Correctly! You Will Be Told If The Song Can Not Be Found!</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Frameworks -->
+    <script src="/frameworks/jquery.min.js"></script>
+    <script src="/frameworks/popper.min.js"></script>
+    <script src="/frameworks/bootstrap.min.js"></script>
+
+    <script>
+    $('.message a').click(function(){
+       $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    });
+    /*
+    function get(name){
+       if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+          return decodeURIComponent(name[1]);
+    }
+
+    function reset() {
+      $("#reply").text("");
+      window.history.pushState({"html":response.html,"pageTitle":response.pageTitle},"", "index.html");
+    }
+
+    if (get('songExists') == "true") {
+      if (get('explicit') == "true") {
+        $("#reply").text("Song Added To The Music Queue But May Not Be Played Because It Is Explicit!");
+        $("#reply").css('color', 'orange');
+        setTimeout(function() { reset(); }, 5000);
+      } else {
+        $("#reply").text("Song Added To The Music Queue!");
+        $("#reply").css('color', 'green');
+        setTimeout(function() { reset(); }, 5000);
+      }
+    } else if (get('songExists') == "false") {
+      $("#reply").text("Song Not Found On Spotify. Please Try Again Or Right Click The Song In Spotify To Get The URI!");
+      $("#reply").css('color', 'red');
+      setTimeout(function() { reset(); }, 5000);
+    }
+    */
+    </script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "name": "musicsuggestions",
+  "version": "1.0.0",
+  "description": "A Web Interface For Music Suggestions At Events!",
+  "main": "main.js",
+  "dependencies": {
+    "basic-auth": "^2.0.0",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "dnsd": "^0.9.6",
+    "express": "^4.15.5",
+    "express-session": "^1.15.6",
+    "express-subdomain": "^1.0.5",
+    "http-auth": "^3.2.3",
+    "moment-timezone": "^0.5.14",
+    "opn": "^5.1.0",
+    "querystring": "^0.2.0",
+    "request": "^2.83.0",
+    "requestify": "^0.2.5",
+    "socket.io": "^2.0.3",
+    "spotify-web-api-node": "^2.5.0",
+    "syswide-cas": "^4.0.0",
+    "useragent": "^2.2.1",
+    "xml-parser": "^1.2.1",
+    "yamlparser": "0.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "Oscar Beaumont"
+}

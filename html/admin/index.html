@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/style/favicon.ico" type="image/x-icon">
+    <!-- After Meta -->
+    <title>Music Suggestions Admin</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/frameworks/bootstrap.min.css">
+    <link rel="stylesheet" href="/style/index.css">
+  </head>
+  <body style="background-color:white;">
+    <div id="sum_box" class="row mbl">
+				<div class="col-sm-6 col-md-3">
+            <div class="panel income db mbm">
+                <div class="panel-body">
+                    <p class="icon">
+                        <i class="icon fa fa-money"></i>
+                    </p>
+                    <h4><span id="songsSuggested"></span> Songs Submitted</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="panel profit db mbm">
+                <div class="panel-body">
+                    <p class="icon">
+                        <i class="icon fa fa-shopping-cart"></i>
+                    </p>
+                    <h4><span id="connectedDevices"></span> Clients Connected</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <h5>Enabled Admin Mode!</h5>
+    <div class="btn-group" role="group" aria-label="Admin Mode">
+      <button type="button" class="btn btn-secondary" id="admin-enable">Enable Admin Mode</button>
+      <button type="button" class="btn btn-secondary" id="admin-disable">Disable Admin Mode</button>
+    </div>
+
+    <div class="btn-group" role="group" aria-label="Public Mode">
+      <button type="button" class="btn btn-secondary" id="public-enable">Enable Public Mode</button>
+      <button type="button" class="btn btn-secondary" id="public-disable">Disable Public Mode</button>
+    </div>
+
+    <div class="btn-group" role="group" aria-label="Presenter Mode">
+      <button type="button" class="btn btn-secondary" id="presenter-enable">Enable Presenter Mode</button>
+      <button type="button" class="btn btn-secondary" id="presenter-disable">Disable Presenter Mode</button>
+    </div>
+
+    <div class="btn-group" role="group" aria-label="Presenter Mode">
+      <button type="button" class="btn btn-secondary" id="clear-modes">Clear All Modes</button>
+      <button type="button" class="btn btn-secondary" id="submittions-increase">Increase Max Songs</button>
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#confirm-delete">Clear All Submitted Songs</button>
+    </div>
+
+    <br>
+    <br>
+    <div class="row">
+      <div class="col" style="width:50%;">
+        <canvas id="operatingSystems"></canvas>
+      </div>
+      <div class="col" style="width:50%;">
+        <canvas id="browsers"></canvas>
+      </div>
+    </div>
+
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>You are about to delete one track, this procedure is irreversible.</p>
+                    <p>Do you want to proceed?</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok" id="delete_btn">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frameworks -->
+    <script src="/frameworks/jquery.min.js"></script>
+    <script src="/frameworks/popper.min.js"></script>
+    <script src="/frameworks/bootstrap.min.js"></script>
+    <script src="/frameworks/Chart.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+    $('#clear-songs').on('show.bs.modal', function(e) {
+      $.post("/clear-songs/", function(data) {
+        alert(data);
+      });
+    });
+    $("#delete_btn").click(function() {
+      $.post("/clear-songs/", function(data) {
+        alert(data);
+      });
+    });
+    $("#admin-enable").click(function() {
+      $.post("/admin/enable/", function(data) {
+        alert(data);
+      });
+    });
+    $("#admin-disable").click(function() {
+      $.post("/admin/disable/", function(data) {
+        alert(data);
+      });
+    });
+    $("#public-enable").click(function() {
+      $.post("/public/enable/", function(data) {
+        alert(data);
+      });
+    });
+    $("#public-disable").click(function() {
+      $.post("/public/disable/", function(data) {
+        alert(data);
+      });
+    });
+    $("#presenter-enable").click(function() {
+      $.post("/presenter/enable/", function(data) {
+        alert(data);
+      });
+    });
+    $("#presenter-disable").click(function() {
+      $.post("/presenter/disable/", function(data) {
+        alert(data);
+      });
+    });
+    $("#clear-modes").click(function() {
+      $.post("/clear-modes/", function(data) {
+        alert(data);
+      });
+    });
+    $("#submittions-increase").click(function() {
+      $.post("/submittions-increase/", function(data) {
+        alert(data);
+      });
+    });
+
+    var colors = [];
+    colors.push("#6dc066");
+    colors.push("#ffff66");
+    colors.push("#f6546a");
+    colors.push("#b0e0e6");
+    colors.push("#fa8072");
+    colors.push("#ffc0cb");
+    colors.push("#ff0000");
+    colors.push("#008080");
+    colors.push("#d3ffce");
+    colors.push("#7fffd4");
+    colors.push("#333333");
+    colors.push("#00ff00");
+    colors.push("#dddddd");
+    colors.push("#ffc3a0");
+    colors.push("#8a2be2");
+    //Random Old Ones Below
+    colors.push("#8b0000");
+    colors.push("#e9967a");
+    colors.push("#9400d3");
+    colors.push("#ff00ff");
+    colors.push("#006400");
+    colors.push("#8b008b");
+    colors.push("#a52a2a");
+    colors.push("#00ffff");
+    </script>
+
+    <script>
+    Chart.defaults.global.defaultFontFamily='-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',Chart.defaults.global.defaultFontColor="#292b2c";
+
+    /*new Chart(document.getElementById("myAreaChart"),{type:"line",data:{labels:["Mar 1","Mar 2","Mar 3","Mar 4","Mar 5","Mar 6","Mar 7","Mar 8","Mar 9","Mar 10","Mar 11","Mar 12","Mar 13"],datasets:[{label:"Sessions",lineTension:.3,backgroundColor:"rgba(2,117,216,0.2)",borderColor:"rgba(2,117,216,1)",pointRadius:5,pointBackgroundColor:"rgba(2,117,216,1)",pointBorderColor:"rgba(255,255,255,0.8)",pointHoverRadius:5,pointHoverBackgroundColor:"rgba(2,117,216,1)",pointHitRadius:20,pointBorderWidth:2,data:[1e4,30162,26263,18394,18287,28682,31274,33259,25849,24159,32651,31984,38451]}]},options:{scales:{xAxes:[{time:{unit:"date"},gridLines:{display:!1},ticks:{maxTicksLimit:7}}],yAxes:[{ticks:{min:0,max:4e4,maxTicksLimit:5},gridLines:{color:"rgba(0, 0, 0, .125)"}}]},legend:{display:!1}}});
+*/
+
+    function countInArray(array, what) {
+        var count = 0;
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] === what) {
+                count++;
+            }
+        }
+        return count;
+    }
+    </script>
+
+    <script>
+    var socket = io();
+
+    socket.emit("admin-askClients", "now");
+    setInterval(function(){ socket.emit("admin-askClients", "now"); socket.emit("admin-askSongs", "now"); }, 2000);
+
+    var PrevOperatingSystems = [];
+    var PrevOperatingShare = [];
+    var PrevBrowsers = [];
+    var PrevBrowsersShare = [];
+
+    socket.on('auth', function(msg){
+      window.location.href = "/";
+    });
+
+    socket.on('admin-songs', function(msg){
+      document.getElementById("songsSuggested").innerHTML = msg;
+    });
+
+    socket.on('admin-clients', function(msg){
+      var usersObj = JSON.parse(msg);
+
+      var rawOSdata = [];
+      var rawBrowserData = [];
+      var devices = 0;
+
+      for (var key in usersObj) {
+        if (usersObj.hasOwnProperty(key)) {
+          rawOSdata.push(usersObj[key].os);
+          rawBrowserData.push(usersObj[key].browser);
+          devices = devices + 1;
+        }
+      }
+
+      document.getElementById("connectedDevices").innerHTML = devices;
+
+      /////////////////////////////////
+      // Operating Systems Pie Graph //
+      /////////////////////////////////
+      var operatingSystems = [];
+      var operatingShare = [];
+      var operatingColors = [];
+
+      $.each(rawOSdata, function(i, el){ if($.inArray(el, operatingSystems) === -1) operatingSystems.push(el); });
+      for (i = 0; i < operatingSystems.length; i++) { operatingColors.push(colors[i]); }
+      for (i = 0; i < operatingSystems.length; i++) { operatingShare.push(countInArray(operatingSystems, operatingSystems[i]) / operatingSystems.length * 100); }
+
+      if (PrevOperatingSystems.toString() != operatingSystems.toString() || PrevOperatingShare.toString() != operatingShare.toString()) {
+        new Chart(document.getElementById("operatingSystems"),{type:"pie",data:{labels:operatingSystems,datasets:[{data:operatingShare,backgroundColor:operatingColors}]}});
+        PrevOperatingSystems = operatingSystems;
+        PrevOperatingShare = operatingShare;
+      }
+
+      ////////////////////////
+      // Browsers Pie Graph //
+      ////////////////////////
+      var browsers = [];
+      var browsersShare = [];
+      var browsersColors = [];
+
+      $.each(rawBrowserData, function(i, el){ if($.inArray(el, browsers) === -1) browsers.push(el); });
+      for (i = 0; i < browsers.length; i++) { browsersColors.push(colors[i]); }
+      for (i = 0; i < browsers.length; i++) { browsersShare.push(countInArray(browsers, browsers[i]) / browsers.length * 100); }
+
+      if (PrevBrowsers.toString() != browsers.toString() || PrevBrowsersShare.toString() != browsersShare.toString()) {
+        new Chart(document.getElementById("browsers"),{type:"pie",data:{labels:browsers,datasets:[{data:browsersShare,backgroundColor:browsersColors}]}});
+        PrevBrowsers = browsers;
+        PrevBrowsersShare = browsersShare;
+      }
+
+    });
+    </script>
+
+    <style>
+    .btn-group {
+      padding-right: 40px;
+    }
+    </style>
+  </body>
+</html>

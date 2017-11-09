@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="style/favicon.ico" type="image/x-icon">
+    <!-- After Meta -->
+    <title>Music Suggestions</title>
+
+    <!-- Stylesheets -->
+    <link href="/style/Montserrat.ttf" rel="x-font-ttf">
+    <link rel="stylesheet" href="/frameworks/bootstrap.min.css">
+    <link href="/frameworks/fonts/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style/index.css">
+    <style>
+    body {
+      overflow-x: hidden;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <table class="table">
+        <tbody id="songs">
+          <button type="button" class="btn btn-success btn-lg btn-block" width="100%" onclick="window.location.replace('/submittion/')">Suggest New Song!</button>
+          <!-- Songs Below -->
+
+          </tbody>
+      </table>
+    </div>
+
+    <!-- Frameworks -->
+    <script src="/frameworks/jquery.min.js"></script>
+    <script src="/script/dynamic-gradient.js"></script>
+    <script src="/frameworks/popper.min.js"></script>
+    <script src="/frameworks/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="/script/new-song.js"></script>
+    <script>
+    var socket = io();
+
+    var upvotes = [];
+    var downvotes = [];
+
+    function updateVotes() {
+      for(i = 0; i < upvotes.length; i++) {
+        var songDetails = upvotes[i].split("\n\n\n\n");
+        $(".upvote").each(function(i, obj) {
+          if (songDetails[0] == obj.getAttribute("name")) {
+            if (songDetails[1] == obj.getAttribute("artists")) {
+              $(obj).addClass("disabled");
+              $(obj).children().eq(1).text(" Already Liked");
+            }
+          }
+        });
+      }
+
+      for(i = 0; i < downvotes.length; i++) {
+        var songDetails = downvotes[i].split("\n\n\n\n");
+        $(".downvote").each(function(i, obj) {
+          if (songDetails[0] == obj.getAttribute("name")) {
+            if (songDetails[1] == obj.getAttribute("artists")) {
+              $(obj).addClass("disabled");
+              $(obj).children().eq(1).text(" Already Disliked");
+            }
+          }
+        });
+      }
+    }
+
+    socket.on('upvotes', function(msg){
+      setTimeout(function() {
+        var reply = JSON.parse(msg);
+        upvotes = reply;
+        updateVotes();
+      }, 500);
+    });
+    socket.on('downvotes', function(msg){
+      setTimeout(function() {
+        var reply = JSON.parse(msg);
+        downvotes = reply;
+        updateVotes();
+      }, 500);
+    });
+    socket.on('lock', function(msg){
+      window.location.href = "/";
+    });
+    socket.on('auth', function(msg){
+      window.location.href = "/";
+    });
+    socket.on('update', function(msg){
+      var songs = JSON.parse(msg);
+      $("#songs").empty();
+      for (i = 0; i < songs.length; i++) {
+        //console.log(songs[i].name + "     " + songs[i].rank);
+        $("#songs").append(new newSong(songs[i].name, songs[i].artists, songs[i].albumArt, songs[i].rank, songs[i].votes ));
+      }
+      updateVotes();
+    });
+    socket.on('disconnect', function(msg){
+      $("#songs").empty();
+      console.log("Lost Connection To Server!");
+    });
+    </script>
+  </body>
+</html>
