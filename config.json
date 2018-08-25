@@ -1,0 +1,11 @@
+{
+  "http": 8080,
+  "webAdminPassword": "password",
+  "sessionSecret": "keepThisLongPrivateAndNotPublic",
+  "webPath": "./html/",
+  "spotify": {
+    "id": "",
+    "secret": "",
+    "callback": "https://musicsuggestions.example.com"
+  }
+}

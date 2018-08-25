@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <!-- After Meta -->
+    <title>Music Suggestions</title>
+
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+
+    <!-- Loader Styles -->
+    <style>#loader{position:absolute;left:50%;top:50%;z-index:1;margin:-75px 0 0 -75px;border:16px solid #f3f3f3;border-radius:50%;border-top:16px solid #3498db;width:120px;height:120px;-webkit-animation:spin 2s linear infinite;animation:spin 2s linear infinite}@-webkit-keyframes spin{0%{-webkit-transform:rotate(0)}100%{-webkit-transform:rotate(360deg)}}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.animate-bottom{position:relative;-webkit-animation-name:animatebottom;-webkit-animation-duration:1s;animation-name:animatebottom;animation-duration:1s}@-webkit-keyframes animatebottom{from{bottom:-100px;opacity:0}to{bottom:0;opacity:1}}@keyframes animatebottom{from{bottom:-100px;opacity:0}to{bottom:0;opacity:1}}</style>
+  </head>
+  <body onload="finishedLoading()">
+    <div id="loader"></div>
+
+    <div id="app" style="display:none;">
+      <div class="login-page">
+        <div class="form">
+          <form class="login-form" action="javascript:return;">
+            <h2>Playlist Manager</h2>
+            <p style="font-size: 13px;">Use The Buttons Below To Load/Dump To A Playlist. You Can Get The Playlists URI By Right Clicking, Then Going To "Share" Then "Copy Spotify URI". You Will Also Be Asked To Login To Your Spotify.</p>
+
+            <div id="spotify-details">
+              <div v-if="user">
+                <h3>Spotify Details:</h3>
+                <img style="display: inline;" v-bind:src="user.img" width="50px"></img>
+                <p style="display: inline;">{{user.name}}</p>
+              </div>
+              <button class="buttonload" v-if="!user" onclick="location.href='/spotify/auth'">Connect Spotify</button>
+            </div>
+
+            <div v-if="user">
+              <input type="text" required v-model="spotifyUri" placeholder="Playlist Uri"/>
+              <button class="buttonload" v-on:click="importPlaylist">Import From Playlist</button>
+              <br>
+              <p style="font-size: 15px;">{{statusText}}</p>
+              <button class="buttonload" v-on:click="exportPlaylist">Export To Playlist</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Javascript -->
+    <script src="/static/background-gradient.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="/static/playlist-manager.js"></script>
+    <script>
+    function finishedLoading() {
+      var fadeTarget = document.getElementById("loader");
+      var fadeEffect = setInterval(function () {
+          if (!fadeTarget.style.opacity) {
+              fadeTarget.style.opacity = 1;
+          }
+          if (fadeTarget.style.opacity > 0) {
+              fadeTarget.style.opacity -= 0.1;
+          } else {
+              clearInterval(fadeEffect);
+              document.getElementById("app").style.display = "block";
+          }
+      }, 25);
+    }
+    </script>
+  </body>
+</html>

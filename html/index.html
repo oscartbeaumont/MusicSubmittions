@@ -4,105 +4,101 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="style/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <!-- After Meta -->
     <title>Music Suggestions</title>
 
     <!-- Stylesheets -->
-    <link href="/style/Montserrat.ttf" rel="x-font-ttf">
-    <link rel="stylesheet" href="/frameworks/bootstrap.min.css">
-    <link href="/frameworks/fonts/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/style/index.css">
-    <style>
-    body {
-      overflow-x: hidden;
-    }
-    </style>
-  </head>
-  <body>
-    <div id="content">
-      <table class="table">
-        <tbody id="songs">
-          <button type="button" class="btn btn-success btn-lg btn-block" width="100%" onclick="window.location.replace('/submittion/')">Suggest New Song!</button>
-          <!-- Songs Below -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
 
+    <!-- Loader Styles -->
+    <style>#loader{position:absolute;left:50%;top:50%;z-index:1;margin:-75px 0 0 -75px;border:16px solid #f3f3f3;border-radius:50%;border-top:16px solid #3498db;width:120px;height:120px;-webkit-animation:spin 2s linear infinite;animation:spin 2s linear infinite}@-webkit-keyframes spin{0%{-webkit-transform:rotate(0)}100%{-webkit-transform:rotate(360deg)}}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.animate-bottom{position:relative;-webkit-animation-name:animatebottom;-webkit-animation-duration:1s;animation-name:animatebottom;animation-duration:1s}@-webkit-keyframes animatebottom{from{bottom:-100px;opacity:0}to{bottom:0;opacity:1}}@keyframes animatebottom{from{bottom:-100px;opacity:0}to{bottom:0;opacity:1}}</style>
+  </head>
+  <body onload="finishedLoading()">
+    <div id="loader"></div>
+
+    <div id="app" style="display:none;">
+      <div id="content">
+        <table class="table">
+          <tbody id="songs">
+            <button type="button" class="btn btn-success btn-lg btn-block" width="100%" onclick="location.href='/submission'">Suggest New Song!</button>
+            <!-- Songs Below -->
+            <tr  v-if="admin">
+              <th>
+                <div class="row">
+                  <div class="col-sm-12, col-md-11">
+                    <h3 style="display: inline-block; font-size: 1.3em;">Total Submitted Songs: {{music.length}}</h3>
+                    <h3 style="display: inline-block; font-size: 1.3em; margin-left: 60px;">Total Online Users: {{sessionCount}}</h3>
+
+                    <button type="button" class="btn btn-success btn-lg upvote" style="display: inline-block; margin-left: 60px;" onclick="window.open('/playlist-manager')">
+                      <i aria-hidden="true" class="fa fa-files-o"></i>
+                      <span> Playlist Manager</span>
+                    </button>
+                  </div>
+                </div>
+              </th>
+            </tr>
+
+            <tr v-for="(song, index) in orderedMusic">
+              <th>
+                <div class="row">
+                  <div class="col-sm-12, col-md-11">
+                    <h3 style="display: inline; font-size: 1.3em;">Rank: {{index}}, Votes: {{song.votes}}</h3>
+                    <img v-bind:src="song.albumArtUrl" style="width: 100px; height: 100px; float: left; margin-right: 10px;"></img>
+                    <h2 style="font-family: Montserrat, sans-serif; font-weight: bold; font-size: 1.7em;">{{song.name}}</h2>
+                    <h2 style="font-family: Montserrat, sans-serif; font-size: 1.5em;">{{song.artists}}</h2>
+                  </div>
+                  <div class="col-sm-12, col-md-12" style="margin-top: 10px;">
+                    <button type="button" class="btn btn-success btn-lg upvote" v-bind:name="song.id" v-on:click="upVote">
+                      <i aria-hidden="true" class="fa fa-thumbs-up logo"></i>
+                      <i class="fa fa-spinner fa-spin" aria-hidden="true" style="display: none;"></i>
+                      <span> Like</span>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-lg btn-dislike downvote" v-bind:name="song.id" v-on:click="downVote">
+                      <i aria-hidden="true" class="fa fa-thumbs-down logo"></i>
+                      <i class="fa fa-spinner fa-spin" aria-hidden="true" style="display: none;"></i>
+                      <span> Dislike</span>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-lg btn-dislike" v-bind:name="song.id" v-on:click="removeSong" v-if="admin">
+                      <i aria-hidden="true" class="fa fa-times logo"></i>
+                      <i class="fa fa-spinner fa-spin" aria-hidden="true" style="display: none;"></i>
+                      <span> Remove</span>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-lg btn-dislike" v-if="admin && song.explicit">
+                      <i aria-hidden="true" class="fa fa-exclamation-triangle"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+            </tr>
           </tbody>
-      </table>
+        </table>
+      </div>
     </div>
 
-    <!-- Frameworks -->
-    <script src="/frameworks/jquery.min.js"></script>
-    <script src="/script/dynamic-gradient.js"></script>
-    <script src="/frameworks/popper.min.js"></script>
-    <script src="/frameworks/bootstrap.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-
-    <script src="/script/new-song.js"></script>
+    <!-- Javascript -->
+    <script src="/static/background-gradient.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <script src="/static/index.js"></script>
     <script>
-    var socket = io();
-
-    var upvotes = [];
-    var downvotes = [];
-
-    function updateVotes() {
-      for(i = 0; i < upvotes.length; i++) {
-        var songDetails = upvotes[i].split("\n\n\n\n");
-        $(".upvote").each(function(i, obj) {
-          if (songDetails[0] == obj.getAttribute("name")) {
-            if (songDetails[1] == obj.getAttribute("artists")) {
-              $(obj).addClass("disabled");
-              $(obj).children().eq(1).text(" Already Liked");
-            }
+    function finishedLoading() {
+      var fadeTarget = document.getElementById("loader");
+      var fadeEffect = setInterval(function () {
+          if (!fadeTarget.style.opacity) {
+              fadeTarget.style.opacity = 1;
           }
-        });
-      }
-
-      for(i = 0; i < downvotes.length; i++) {
-        var songDetails = downvotes[i].split("\n\n\n\n");
-        $(".downvote").each(function(i, obj) {
-          if (songDetails[0] == obj.getAttribute("name")) {
-            if (songDetails[1] == obj.getAttribute("artists")) {
-              $(obj).addClass("disabled");
-              $(obj).children().eq(1).text(" Already Disliked");
-            }
+          if (fadeTarget.style.opacity > 0) {
+              fadeTarget.style.opacity -= 0.1;
+          } else {
+              clearInterval(fadeEffect);
+              document.getElementById("app").style.display = "block";
           }
-        });
-      }
+      }, 25);
     }
-
-    socket.on('upvotes', function(msg){
-      setTimeout(function() {
-        var reply = JSON.parse(msg);
-        upvotes = reply;
-        updateVotes();
-      }, 500);
-    });
-    socket.on('downvotes', function(msg){
-      setTimeout(function() {
-        var reply = JSON.parse(msg);
-        downvotes = reply;
-        updateVotes();
-      }, 500);
-    });
-    socket.on('lock', function(msg){
-      window.location.href = "/";
-    });
-    socket.on('auth', function(msg){
-      window.location.href = "/";
-    });
-    socket.on('update', function(msg){
-      var songs = JSON.parse(msg);
-      $("#songs").empty();
-      for (i = 0; i < songs.length; i++) {
-        //console.log(songs[i].name + "     " + songs[i].rank);
-        $("#songs").append(new newSong(songs[i].name, songs[i].artists, songs[i].albumArt, songs[i].rank, songs[i].votes ));
-      }
-      updateVotes();
-    });
-    socket.on('disconnect', function(msg){
-      $("#songs").empty();
-      console.log("Lost Connection To Server!");
-    });
     </script>
   </body>
 </html>
