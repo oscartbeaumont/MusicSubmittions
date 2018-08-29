@@ -1,61 +1,56 @@
-# MusicSubmittions
-A Web Application For Users To Submit and Vote On Music Suggestions During An Event.
-User Can Go To A Website On Thier Device (Or Be Redirected By DNS) and can vote and submit music. This application uses the Spotify API to check that the song exists. There is also the ability to remove songs, view whether they are explicit and dump them into a playlist on Spotify so you can play them. 
+# Music Suggestions
+A web app for choosing & voting on music for events! It allows for submitting and voting on music to be played at events like socials and parties. It also uses cookies to stop people from voting multiple times and allows for an admin to remove songs, export & import to a spotify playlist and see if a song is explicit. It is based on the Spotify API which is used for checking that songs exist and getting information about them.
 
 ## Features
-* Submit Songs
+* Suggest Songs (Which Are Checked To Exist On Spotify)
 * Vote On Songs
-* Check Songs Exist On Spotify
 * Can Remove Songs (Admin)
-* Dump The Songs Into Spotify playlist (Admin)
-* Marks Explicit Songs (Admin)
-* Modes:
-  * User (Default) (For People Who Come To The Event)
-  * Admin (For Event Organisers)
-  * Presenter (For Putting On Screen (No Voting Or Submitting Songs))
-  * Public (For A Public Device To Submit Songs (No Voting))
+* Dump and Load From Spotify Playlist's (Admin)
+* Shows Explicit Songs (Admin)
 
 ## Users View
 ![alt text](https://github.com/oscartbeaumont/MusicSubmittions/blob/master/docs/users-view.png "Users View")
 
-## Admin View ('/admin')
+## Admin View
 ![alt text](https://github.com/oscartbeaumont/MusicSubmittions/blob/master/docs/admins-view.png "Admin View")
 
 ## Installation
-
 ```bash
-git clone https://github.com/oscartbeaumont/MusicSubmittions.git
-cd MusicSubmittions
-mkdir album_art
-mkdir backup
+git clone https://github.com/oscartbeaumont/MusicSuggestions.git
+cd MusicSuggestions
 npm install
+npm run build
 node main.js
 ```
-You can use the config.js file to configure the application. At the bottom of the main.js file you can uncomment a line if you would like to import music from a Spotify playlist on startup (WARNING This Feature Has Been Acting Wierd).
+### Running On Startup And Crash Recovery
+```bash
+sudo npm install -g pm2
+pm2 start server.js
+pm2 startup
+```
 
-### Thanks To All Of The Developers Who Built The Frameworks This Is Build On.
-* Font Awesome
+# How To Use
+The application has a web interface and a config for management. The Config Files Options Are In The Next Section. The Other Two Are:
+* / - This Interface Is Where You Send Your Users To. When In Admin Mode Extra Features Are Unlocked In This Page.
+* /admin - This is where you login to enable the admin features.
+* /logout - Logout as an admin user.
+
+## Config Options
+You can use the config.js file to configure the application with the options below. The ">" symbol means put it into an object.
+
+| Option Name        | Type   | Default Value                | Description                               |
+|--------------------|--------|------------------------------|-------------------------------------------|
+| http               | Int    | 80                           | The HTTP Server Port                      |
+| webAdminPassword   | String | password                     | The Password For The Admin Interface      |
+| sessionSecret      | String |                              | A Random String For Securing The Sessions |
+| spotify > id       | String |                              | Your Spotify API ID                       |
+| spotify > secret   | String |                              | Your Spotify API Secret                   |
+| spotify > callback | String | https://example.com/callback | Your Applications Public URL. "/callback" |
+| proxy              | String | 192.168.1.1                  | The IP Of Your Proxy (eg. Nginx)          |
+
+### Thanks To All Of The Frameworks And Librarys This Is Built On
+* VueJS
 * Bootstrap
-* Chartist.js
-* dnsd
-* https
-* http
-* express
-* express-session
-* express-subdomain
-* basic-auth
-* request
-* spotify-web-api-node
-* body-parser
-* cookie-parser
-* querystring
-* opn
-* fs
-* dns
-* useragent
-* url
-* httpsReq
-* path
-* Moment
-* util
-* And Any Others I Have Missed
+* Express
+* Spotify Web API Node
+* And Many Others
