@@ -27,6 +27,7 @@ node server.js
 sudo npm install -g pm2
 pm2 start server.js
 pm2 startup
+pm2 save
 ```
 
 # How To Use
