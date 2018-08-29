@@ -20,7 +20,7 @@ git clone https://github.com/oscartbeaumont/MusicSuggestions.git
 cd MusicSuggestions
 npm install
 npm run build
-node main.js
+node server.js
 ```
 ### Running On Startup And Crash Recovery
 ```bash
