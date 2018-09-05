@@ -11,6 +11,12 @@ COPY package*.json ./
 # Install The Required Packages
 RUN npm install --only=production
 
+# Build The Static Files
+RUN npm run build
+
+# Delete The Uncompiled Files
+RUN rm -rf html/
+
 # Bundle app source
 COPY . .
 
