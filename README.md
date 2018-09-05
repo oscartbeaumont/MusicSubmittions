@@ -15,20 +15,15 @@ A web app for choosing & voting on music for events! It allows for submitting an
 ![alt text](https://github.com/oscartbeaumont/MusicSubmittions/blob/master/docs/admins-view.png "Admin View")
 
 ## Installation
+## Deployment With Docker
+Music Suggestions can be deplpoyed using Docker which makes it much easier to update and install. Below are the commands to use it.
 ```bash
-git clone https://github.com/oscartbeaumont/MusicSuggestions.git
-cd MusicSuggestions
-npm install
-npm run build
-node server.js
+docker volume create MusicSuggestionsData
+docker run -d --name MusicSuggestions -p 8080:8080 -v MusicSuggestionsData:/usr/src/app oscartbeaumont/musicsuggestions
 ```
-### Running On Startup And Crash Recovery
-```bash
-sudo npm install -g pm2
-pm2 start server.js
-pm2 startup
-pm2 save
-```
+
+## Deploying Without Docker or Developing On Music Suggestions
+You can refer to the Dockerfile and the Package.json scripts for how to manually install it.
 
 # How To Use
 The application has a web interface and a config for management. The Config Files Options Are In The Next Section. The Other Two Are:
