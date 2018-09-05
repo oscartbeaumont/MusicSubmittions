@@ -24,6 +24,6 @@
   "scripts": {
     "start": "node server.js",
     "build": "gulp build",
-    "disableSSL": "export NODE_TLS_REJECT_UNAUTHORIZED=0;"
+    "build-docker": "docker build -t oscartbeaumont/musicsuggestions ."
   }
 }
