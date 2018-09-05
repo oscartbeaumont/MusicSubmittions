@@ -3,10 +3,8 @@ FROM mhart/alpine-node:latest
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+# Bundle app source
+COPY . .
 
 # Install The Required Packages
 RUN yarn
@@ -16,9 +14,6 @@ RUN yarn run build
 
 # Delete The Uncompiled Files
 RUN rm -rf html/
-
-# Bundle app source
-COPY . .
 
 EXPOSE 8080
 CMD [ "yarn", "start" ]
