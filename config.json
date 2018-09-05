@@ -2,7 +2,7 @@
   "http": 8080,
   "webAdminPassword": "password",
   "sessionSecret": "keepThisLongPrivateAndNotPublic",
-  "webPath": "./html/",
+  "webPath": "",
   "spotify": {
     "id": "",
     "secret": "",
