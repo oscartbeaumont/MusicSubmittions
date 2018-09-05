@@ -1,4 +1,4 @@
-FROM node:8
+FROM mhart/alpine-node:latest
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -9,10 +9,10 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install The Required Packages
-RUN npm install --only=production
+RUN yarn
 
 # Build The Static Files
-RUN npm run build
+RUN yarn run build
 
 # Delete The Uncompiled Files
 RUN rm -rf html/
@@ -21,4 +21,4 @@ RUN rm -rf html/
 COPY . .
 
 EXPOSE 8080
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]
