@@ -15,5 +15,5 @@ RUN yarn run build
 # Delete The Uncompiled Files
 RUN rm -rf html/
 
-EXPOSE 8080
+EXPOSE 80
 CMD [ "yarn", "start" ]
