@@ -1,5 +1,5 @@
 {
-  "http": 8080,
+  "http": 80,
   "webAdminPassword": "password",
   "sessionSecret": "keepThisLongPrivateAndNotPublic",
   "webPath": "",
