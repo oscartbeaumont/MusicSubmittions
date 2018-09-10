@@ -19,7 +19,7 @@ A web app for choosing & voting on music for events! It allows for submitting an
 Music Suggestions can be deplpoyed using Docker which makes it much easier to update and install. Below are the commands to use it.
 ```bash
 docker volume create MusicSuggestionsData
-docker run -d --name MusicSuggestions -p 8080:8080 -v MusicSuggestionsData:/usr/src/app oscartbeaumont/musicsuggestions
+docker run -d --name MusicSuggestions -p 8080:80 -v MusicSuggestionsData:/usr/src/app oscartbeaumont/musicsuggestions
 ```
 
 ## Deploying Without Docker or Developing On Music Suggestions
